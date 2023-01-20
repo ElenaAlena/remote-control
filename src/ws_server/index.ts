@@ -1,5 +1,6 @@
 import WebSocket, { createWebSocketStream, WebSocketServer } from "ws";
 import internal from "stream";
+import { wsHandler } from "./handler.js";
 
 const WSS_PORT = 8080;
 
@@ -16,8 +17,9 @@ export const wsServer = (): void => {
       });
 
       duplex.on("data", async (chunk) => {
-        const [message] = chunk.split(" ");
-        console.log(message);
+        const res: string = await wsHandler(chunk);
+        duplex.write(res);
+        //ws.send(res);
       });
     })
     .on("error", console.log)
