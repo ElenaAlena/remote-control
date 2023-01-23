@@ -11,7 +11,7 @@ const WSS_PORT: number = Number(process.env.WSS_PORT) || 8080;
 console.log(`Start static http server on the ${HTTP_PORT} port!`);
 httpServer.listen(HTTP_PORT);
 
-wsServer(WSS_PORT);
+const ws = wsServer(WSS_PORT);
 
 process.on("exit", (code) => {
   if (code === 0) {
@@ -19,6 +19,9 @@ process.on("exit", (code) => {
   }
 });
 process.on("SIGINT", () => {
+  httpServer.close(() => {
+    console.log("server is closed");
+  });
+  ws.close();
   process.exit();
 });
-

@@ -2,7 +2,9 @@ import WebSocket, { createWebSocketStream, WebSocketServer } from "ws";
 import internal from "stream";
 import { wsHandler } from "./handler.js";
 
-export const wsServer = (wss_port:number): void => {
+export const wsServer = (
+  wss_port: number
+): WebSocket.Server<WebSocket.WebSocket> => {
   const websocketServer = new WebSocketServer({ port: wss_port });
 
   websocketServer
@@ -21,4 +23,6 @@ export const wsServer = (wss_port:number): void => {
     })
     .on("error", console.log)
     .on("close", () => console.log("Client disconnected"));
+
+  return websocketServer;
 };
